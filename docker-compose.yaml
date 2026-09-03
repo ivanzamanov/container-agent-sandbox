@@ -1,0 +1,43 @@
+name: agent-sandbox
+services:
+  claude:
+    userns_mode: keep-id
+    build:
+      dockerfile: src/Sandbox.Dockerfile
+      args:
+        UID: 501 # id -u
+        GID: 20 # id -g
+    volumes:
+      - $PWD/dot-claude:/home/agent/.claude/:rw
+      - $PWD/dot-claude.json:/home/agent/.claude.json
+      - $PWD/dot-config:/home/agent/.config/:rw
+      - $PWD/src/mise-config.toml:/home/agent/.config/mise/config.toml:rw
+      - $PWD/workspace:/home/agent/workspace:rw
+    environment:
+      HTTP_PROXY: http://proxy:3128
+      HTTPS_PROXY: http://proxy:3128
+      NO_PROXY: localhost,127.0.0.1
+      http_proxy: http://proxy:3128
+      https_proxy: http://proxy:3128
+      no_proxy: localhost,127.0.0.1
+    networks:
+      - sandbox
+    depends_on:
+      - proxy
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETUID
+      - SETGID
+      - DAC_READ_SEARCH
+  proxy:
+    image: ubuntu/squid:latest
+    volumes:
+      - $PWD/squid.conf:/etc/squid/squid.conf:ro
+    networks:
+      - sandbox
+      - internet
+networks:
+  sandbox:
+    internal: true
+  internet:
