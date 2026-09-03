@@ -2,11 +2,7 @@ name: agent-sandbox
 services:
   claude:
     userns_mode: keep-id
-    build:
-      dockerfile: src/Sandbox.Dockerfile
-      args:
-        UID: 501 # id -u
-        GID: 20 # id -g
+    image: docker.io/library/container-agent-sandbox
     volumes:
       - $PWD/dot-claude:/home/agent/.claude/:rw
       - $PWD/dot-claude.json:/home/agent/.claude.json

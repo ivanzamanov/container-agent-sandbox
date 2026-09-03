@@ -32,7 +32,7 @@ __install_zellij() {
   esac
 
   url="https://github.com/zellij-org/zellij/releases/latest/download/zellij-$arch-$sys.tar.gz"
-  curl --silent --location "$url" | tar -C "$dir" -xz
+  curl --silent --location "$url" | sudo tar -C "$dir" -xz
   if [[ $? -ne 0 ]]; then
       echo
       echo "Extracting binary failed, cannot launch zellij"
@@ -92,15 +92,22 @@ __install_tini() {
 }
 
 __install_deps() {
-  sudo dnf install java-latest-openjdk-headless yq jq rustup git -y
-}
+  sudo dnf install procps-ng libatomic1 java-latest-openjdk-headless yq jq rustup git -y
 
-__install_claude() {
   curl -fsSL https://claude.ai/install.sh | bash
+
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.7/install.sh | bash
+  \. "$HOME/.nvm/nvm.sh"
+  nvm install 24
+
+  npm i -g opencode-ai
+
+  npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+
+  curl -fsSL https://botctl.dev/install.sh | sh
 }
 
 __install_tini
-# __install_zellij
+__install_zellij
 __install_mise
-__install_claude
 __install_deps
