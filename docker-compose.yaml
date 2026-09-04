@@ -3,6 +3,7 @@ services:
   claude:
     userns_mode: keep-id
     image: docker.io/library/container-agent-sandbox
+    init: true
     volumes:
       - $PWD/dot-claude:/home/agent/.claude/:rw
       - $PWD/dot-claude.json:/home/agent/.claude.json
@@ -22,10 +23,10 @@ services:
       - proxy
     cap_drop:
       - ALL
-    cap_add:
-      - SETUID
-      - SETGID
-      - DAC_READ_SEARCH
+    # cap_add:
+    #   - SETUID
+    #   - SETGID
+    #   - DAC_READ_SEARCH
   proxy:
     image: ubuntu/squid:latest
     volumes:
