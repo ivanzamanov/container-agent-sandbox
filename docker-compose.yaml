@@ -5,32 +5,36 @@ services:
     image: docker.io/library/container-agent-sandbox
     init: true
     volumes:
+      - $PWD/opencode/.local/share:/home/agent/.local/share/opencode:rw
+      - $PWD/opencode/.local/state:/home/agent/.local/state/opencode:rw
+      - $PWD/dot-config:/home/agent/.config/:rw
+      - $PWD/dot-botctl:/home/agent/.botctl/:rw
       - $PWD/dot-claude:/home/agent/.claude/:rw
       - $PWD/dot-claude.json:/home/agent/.claude.json
-      - $PWD/dot-config:/home/agent/.config/:rw
       - $PWD/src/mise-config.toml:/home/agent/.config/mise/config.toml:rw
       - $PWD/workspace:/home/agent/workspace:rw
     environment:
-      HTTP_PROXY: http://proxy:3128
-      HTTPS_PROXY: http://proxy:3128
+      HTTP_PROXY: http://squid:3128
+      HTTPS_PROXY: http://squid:3128
       NO_PROXY: localhost,127.0.0.1
-      http_proxy: http://proxy:3128
-      https_proxy: http://proxy:3128
+      http_proxy: http://squid:3128
+      https_proxy: http://squid:3128
       no_proxy: localhost,127.0.0.1
-    networks:
-      - sandbox
     depends_on:
-      - proxy
+      - squid
     cap_drop:
       - ALL
-    # cap_add:
-    #   - SETUID
-    #   - SETGID
-    #   - DAC_READ_SEARCH
-  proxy:
+    cap_add:
+      - DAC_READ_SEARCH
+    networks:
+      - sandbox
+    ports:
+      - 4444:4444
+      - 8082:8082
+  squid:
     image: ubuntu/squid:latest
     volumes:
-      - $PWD/squid.conf:/etc/squid/squid.conf:ro
+      - $PWD/src/squid.conf:/etc/squid/squid.conf:ro
     networks:
       - sandbox
       - internet

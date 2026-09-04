@@ -1,7 +1,12 @@
 FROM registry.fedoraproject.org/fedora:44 as builder
 
+ARG DOWNLOAD_DIR=/root/downloads/
 ADD src/download.sh download.sh
-RUN bash download.sh
+
+RUN bash download.sh && \
+  curl -fsSL https://botctl.dev/install.sh -o install.sh && \
+  bash install.sh && rm install.sh && \
+  mv /usr/local/bin/botctl ${DOWNLOAD_DIR}
 
 FROM registry.fedoraproject.org/fedora:44
 
@@ -11,20 +16,22 @@ ARG GID
 RUN groupadd -g $GID agent || true ; \
   useradd --create-home --shell /bin/bash --uid $UID --gid $GID agent
 
-RUN dnf install -y procps-ng libatomic1 java-latest-openjdk-headless yq jq rustup git
+RUN dnf install -y procps-ng libatomic1 java-latest-openjdk-headless yq jq rustup git golang && \
+  dnf clean all
 
 USER agent
 WORKDIR /home/agent
 
 RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.7/install.sh | bash
-RUN curl -fsSL https://botctl.dev/install.sh | bash
 RUN curl -fsSL https://claude.ai/install.sh | bash
 
-COPY --from=builder /root/downloads/* /usr/local/bin
+COPY --from=builder /root/downloads/* /usr/local/bin/
 
 ADD src/install.sh /tmp/install.sh
 RUN bash /tmp/install.sh
 
 ADD src/entrypoint.sh /
-ENTRYPOINT ["bash"]
-CMD [ "/entrypoint.sh" ]
+ENTRYPOINT ["/entrypoint.sh"]
+
+EXPOSE 4444
+EXPOSE 8082

@@ -4,7 +4,7 @@ UID=${UID:-501}
 GID=${GID:-501}
 
 cat - >> $HOME/.bashrc <<EOF
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:\$PATH"
 eval "\$(mise activate bash)"
 EOF
 

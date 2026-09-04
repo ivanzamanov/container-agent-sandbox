@@ -64,4 +64,4 @@ __download_mise() {
 __download_zellij
 __download_mise
 
-chmod a+x $DOWNLOAD_DIR
+chmod a+x $DOWNLOAD_DIR/*

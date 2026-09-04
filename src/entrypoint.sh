@@ -1,4 +1,7 @@
 #!/bin/bash
+set -ex
 
 echo "Started sandbox"
-exec tail -f /dev/null
+
+source ~/.bashrc
+exec botctl --web-ui
