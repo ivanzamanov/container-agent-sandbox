@@ -2,10 +2,9 @@ FROM registry.fedoraproject.org/fedora:44 as builder
 
 ARG DOWNLOAD_DIR=/root/downloads/
 ADD src/download.sh download.sh
+ADD src/botctl-install.sh download.sh
 
-RUN bash download.sh && \
-  curl -fsSL https://botctl.dev/install.sh -o install.sh && \
-  bash install.sh && rm install.sh && \
+RUN bash download.sh && bash botctl-install.sh && \
   mv /usr/local/bin/botctl ${DOWNLOAD_DIR}
 
 FROM registry.fedoraproject.org/fedora:44
