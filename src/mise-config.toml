@@ -1,4 +1,3 @@
 [tools]
 maven = "latest"
 kubectl = "latest"
-opencode = "latest"

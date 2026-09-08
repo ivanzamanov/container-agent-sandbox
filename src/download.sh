@@ -52,6 +52,9 @@ __download_mise() {
       "Linux")
           sys="linux"
       ;;
+      "x86_64")
+          arch="x64"
+      ;;
       *)
           echo "Unsupported system: $(uname -s)"
           exit 2
