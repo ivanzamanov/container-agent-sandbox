@@ -42,6 +42,9 @@ __download_mise() {
       "aarch64")
           arch="arm64"
       ;;
+      "x86_64")
+          arch="x64"
+      ;;
       *)
           echo "Unsupported cpu arch: $(uname -m)"
           exit 2
@@ -51,9 +54,6 @@ __download_mise() {
   case $(uname -s) in
       "Linux")
           sys="linux"
-      ;;
-      "x86_64")
-          arch="x64"
       ;;
       *)
           echo "Unsupported system: $(uname -s)"

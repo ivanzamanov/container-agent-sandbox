@@ -15,7 +15,7 @@ ARG GID
 RUN groupadd -g $GID agent || true ; \
   useradd --create-home --shell /bin/bash --uid $UID --gid $GID agent
 
-RUN dnf install -y procps-ng libatomic1 java-latest-openjdk-headless yq jq rustup git golang vim && \
+RUN dnf install -y procps-ng libatomic1 java-latest-openjdk-headless yq jq rustup git golang vim ss && \
   dnf clean all
 
 USER agent

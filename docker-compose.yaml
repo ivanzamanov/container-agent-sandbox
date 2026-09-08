@@ -30,6 +30,7 @@ services:
       - sandbox
     ports:
       - 4444:4444
+      - 4445:4445
       - 8082:8082
   squid:
     image: ubuntu/squid:latest
