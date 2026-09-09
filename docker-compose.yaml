@@ -29,9 +29,9 @@ services:
     networks:
       - sandbox
     ports:
-      - 4444:4444
-      - 4445:4445
-      - 8082:8082
+      - 4444:4444 # opencode
+      - 4445:4445 # vite dev server
+      - 8082:8082 # zellij
   squid:
     image: ubuntu/squid:latest
     volumes:
