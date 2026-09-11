@@ -11,7 +11,8 @@ services:
       - $PWD/dot-botctl:/home/agent/.botctl/:rw,z
       - $PWD/dot-claude:/home/agent/.claude/:rw,z
       - $PWD/dot-claude.json:/home/agent/.claude.json:rw,z
-      - $PWD/src/mise-config.toml:/home/agent/.config/mise/config.toml:rw,z
+      - $PWD/src/zellij.kdl:/home/agent/.config/zellij/config.kdl:ro,z
+      - $PWD/src/mise-config.toml:/home/agent/.config/mise/config.toml:ro,z
       - $PWD/workspace:/home/agent/workspace:rw,z
     environment:
       HTTP_PROXY: http://squid:3128
